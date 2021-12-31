@@ -30,6 +30,7 @@ namespace GDApp
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        
         /// <summary>
         /// Stores and updates all scenes (which means all game objects i.e. players, cameras, pickups, behaviours, controllers)
         /// </summary>
@@ -300,6 +301,7 @@ namespace GDApp
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
+
         }
 
         /******************************** Student Project-specific ********************************/
@@ -337,7 +339,7 @@ namespace GDApp
             Input.Mouse.Position = Screen.Instance.ScreenCentre;
 
             //turn on/off debug info
-            InitializeDebugUI(true, false);
+            InitializeDebugUI(true, true);
 
             //to show the menu we must start paused for everything else!
             EventDispatcher.Raise(new EventData(EventCategoryType.Menu, EventActionType.OnPause));
@@ -361,9 +363,7 @@ namespace GDApp
 
         private void LoadAssets()
         {
-            LoadModels();
             LoadTextures();
-            LoadVideos();
             LoadSounds();
             LoadFonts();
         }
@@ -373,7 +373,7 @@ namespace GDApp
         /// </summary>
         private void LoadVideos()
         {
-            videoDictionary.Add("Assets/Video/main_menu_video");
+  
         }
 
         /// <summary>
@@ -381,11 +381,7 @@ namespace GDApp
         /// </summary>
         private void LoadModels()
         {
-            //notice with the ContentDictionary we dont have to worry about Load() or a name (its assigned from pathname)
-            modelDictionary.Add("Assets/Models/sphere");
-            modelDictionary.Add("Assets/Models/cube");
-            modelDictionary.Add("Assets/Models/teapot");
-            modelDictionary.Add("Assets/Models/monkey1");
+            
         }
 
         /// <summary>
@@ -693,32 +689,6 @@ namespace GDApp
 
             #endregion Add Reticule
 
-            #region Add Video UI Texture
-
-            ////add a health bar in the centre of the game window
-            //texture = textureDictionary["checkerboard"]; //any texture given we will replace it
-            //position = new Vector2(300, 300);
-
-            //var video = videoDictionary["main_menu_video"];
-            //origin = new Vector2(video.Width / 2, video.Height / 2);
-
-            ////create the UI element
-            //var videoTextureObj = new UITextureObject("main menu video",
-            //    UIObjectType.Texture,
-            //    new Transform2D(position, new Vector2(0.2f, 0.2f), 0),
-            //    0,
-            //    Color.White,
-            //    origin,
-            //    texture);
-
-            ////add a video behaviou
-            //videoTextureObj.AddComponent(new UIVideoTextureBehaviour(
-            //    new VideoCue(video, 0, false)));
-
-            ////add the ui element to the scene
-            //mainGameUIScene.Add(videoTextureObj);
-
-            #endregion Add Video UI Texture
 
             #region Add Scene To Manager & Set Active Scene
 
@@ -909,55 +879,100 @@ namespace GDApp
         private void InitializeCollidables(Scene level, float worldScale = 500)
         {
             InitializeCollidableGround(level, worldScale);
+            InitializeCollidableTetrahedron(level);
+            
             //InitializeCollidableCubes(level);
 
-            //InitializeCollidableModels(level);
-            InitializeCollidableTriangleMeshes(level);
+            //InitializeCollidableTriangleMeshes(level);
         }
 
-
-
-        private void InitializeCollidableTriangleMeshes(Scene level)
+        private void InitializeCollidableTetrahedron(Scene level)
         {
-           
-        }
-
-        private void InitializeCollidableModels(Scene level)
-        {
-            #region Reusable - You can copy and re-use this code elsewhere, if required
-
+            
             //re-use the code on the gfx card, if we want to draw multiple objects using Clone
             var shader = new BasicShader(Application.Content, false, true);
+            //re-use the vertices and indices of the model
+            var mesh = new Tetrahedron();
 
-            //create the sphere
-            var sphereArchetype = new GameObject("sphere", GameObjectType.Interactable, true);
+            var platform = new GameObject("tetrahedron", GameObjectType.Architecture, true);
+            platform.Transform.Rotate(180, 90, 0);
+            platform.Transform.SetTranslation(0, 0, -10);
+            platform.Transform.SetScale(7, 7, 7);
+            platform.AddComponent(new MeshRenderer(mesh, new BasicMaterial("grass_material", shader, Color.White, 1, textureDictionary["grass"])));
 
-            #endregion Reusable - You can copy and re-use this code elsewhere, if required
-
-            GameObject clone = null;
-
-            for (int i = 0; i < 5; i++)
-            {
-                clone = sphereArchetype.Clone() as GameObject;
-                clone.Name = $"sphere - {i}";
-                clone.Transform.SetTranslation(-5 + i / 10f, 5 + 4 * i, 0);
-                clone.AddComponent(new ModelRenderer(
-                    modelDictionary["sphere"],
-                    new BasicMaterial("sphere_material",
-                    shader, Color.White, 1, textureDictionary["checkerboard"])));
-
-                //add Collision Surface(s)
-                collider = new Collider(false, false);
-                clone.AddComponent(collider);
-                collider.AddPrimitive(new JigLibX.Geometry.Sphere(
-                   sphereArchetype.Transform.LocalTranslation, 1),
+            //add Collision Surface(s)
+            collider = new Collider();
+            platform.AddComponent(collider);
+            collider.AddPrimitive(new Box(
+                    platform.Transform.LocalTranslation - new Vector3(0, -100, 0),
+                    platform.Transform.LocalRotation,
+                    platform.Transform.LocalScale),
                     new MaterialProperties(0.8f, 0.8f, 0.7f));
-                collider.Enable(false, 1);
+            collider.Enable(true, 1);
 
-                //add To Scene Manager
-                level.Add(clone);
-            }
+            //add To Scene Manager
+            level.Add(platform);
+            
+
+            //Vector3 backLeft = new Vector3(-0.5f, 0, -0.5f);
+            //Vector3 backRight = new Vector3(0.5f, 0, -0.5f);
+
+            //Vector3 frontLeft = new Vector3(-0.5f, 0, 0.5f);
+            //Vector3 frontRight = new Vector3(0.5f, 0, 0.5f);
+
+            //Vector3 topPoint = new Vector3(0, 1f, 0);
+
+            //basicEffect = new BasicEffect(GraphicsDevice);
+
+            //VertexPositionColor[] vertices = new VertexPositionColor[5];
+            //vertices[0] = new VertexPositionColor(new Vector3(-0.5f, 0, -0.5f), Color.Blue);
+            //vertices[1] = new VertexPositionColor(new Vector3(0.5f, 0, -0.5f), Color.Blue);
+            //vertices[2] = new VertexPositionColor(new Vector3(-0.5f, 0, 0.5f), Color.Blue);
+            //vertices[3] = new VertexPositionColor(new Vector3(0.5f, 0, 0.5f), Color.Blue);
+            //vertices[4] = new VertexPositionColor(new Vector3(0, 1f, 0), Color.Blue);
+
+            //vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionColor), 5, BufferUsage.WriteOnly);
+            //vertexBuffer.SetData<VertexPositionColor>(vertices);
         }
+
+        private void InitializeCollidableTriangleMeshes(Scene level)
+        {/*
+            BasicEffect basicEffect = new BasicEffect(GraphicsDevice);
+
+            VertexPositionColor[] vertices = new VertexPositionColor[3];
+            vertices[0] = new VertexPositionColor(new Vector3(0, 1, 0), Color.Red);
+            vertices[0] = new VertexPositionColor(new Vector3(0.5f, 0, 0), Color.Blue);
+            vertices[0] = new VertexPositionColor(new Vector3(-0.5f, 0, 0), Color.Green);
+
+            VertexBuffer vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionColor), 3, BufferUsage.WriteOnly);
+            vertexBuffer.SetData<VertexPositionColor>(vertices);*/
+           
+            
+           SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
+
+           BasicEffect basicEffect = new BasicEffect(GraphicsDevice);
+
+            VertexPositionColor[] vertices = new VertexPositionColor[12];
+            vertices[0] = new VertexPositionColor(new Vector3(0.000f, 1.000f, 0.000f), Color.Red);
+            vertices[1] = new VertexPositionColor(new Vector3(-0.816f, -0.333f, -0.471f), Color.Blue);
+            vertices[2] = new VertexPositionColor(new Vector3(0.000f, -0.333f, 0.943f), Color.Green);
+            vertices[3] = new VertexPositionColor(new Vector3(0.000f, 1.000f, 0.000f), Color.Red);
+            vertices[4] = new VertexPositionColor(new Vector3(0.816f, -0.333f, -0.471f), Color.Yellow);
+            vertices[5] = new VertexPositionColor(new Vector3(-0.816f, -0.333f, -0.471f), Color.Blue);
+            vertices[6] = new VertexPositionColor(new Vector3(0.000f, -0.333f, 0.943f), Color.Green);
+            vertices[7] = new VertexPositionColor(new Vector3(0.816f, -0.333f, -0.471f), Color.Yellow);
+            vertices[8] = new VertexPositionColor(new Vector3(0.000f, 1.000f, 0.000f), Color.Red);
+            vertices[9] = new VertexPositionColor(new Vector3(-0.816f, -0.333f, -0.471f), Color.Blue);
+            vertices[10] = new VertexPositionColor(new Vector3(0.816f, -0.333f, -0.471f), Color.Yellow);
+            vertices[11] = new VertexPositionColor(new Vector3(0.000f, -0.333f, 0.943f), Color.Green);
+
+            VertexBuffer vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionColor), 12, BufferUsage.WriteOnly);
+            vertexBuffer.SetData<VertexPositionColor>(vertices);
+
+            
+
+        }
+
 
         private void InitializeCollidableGround(Scene level, float worldScale)
         {
@@ -972,8 +987,9 @@ namespace GDApp
 
             //create the ground
             var ground = new GameObject("ground", GameObjectType.Ground, true);
-            ground.Transform.SetTranslation(0, -1, 0);
-            ground.Transform.SetScale(worldScale, 2, worldScale);
+            //ground.Transform.Rotate(0, 0, 0);
+            ground.Transform.SetTranslation(0, -1, 10);
+            ground.Transform.SetScale(20, 2, 20);
             ground.AddComponent(new MeshRenderer(mesh, new BasicMaterial("grass_material", shader, Color.White, 1, textureDictionary["grass"])));
 
             //add Collision Surface(s)
