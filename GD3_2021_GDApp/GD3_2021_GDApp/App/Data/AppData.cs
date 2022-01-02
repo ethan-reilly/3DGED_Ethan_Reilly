@@ -39,13 +39,16 @@ namespace GDApp
 
         //set button positions dynamically from resolution
         public static readonly Vector2 MENU_PLAY_BTN_POSITION
-            = new Vector2(GAME_RESOLUTION_WIDTH / 2, GAME_RESOLUTION_HEIGHT / 2.0f);
+            //= new Vector2(GAME_RESOLUTION_WIDTH / 2, GAME_RESOLUTION_HEIGHT / 2.0f);
+            = new Vector2(500f, 850f);
 
         public static readonly Vector2 MENU_CONTROLS_BTN_POSITION
-            = new Vector2(GAME_RESOLUTION_WIDTH / 2, GAME_RESOLUTION_HEIGHT / 2.0f + 40);
+           // = new Vector2(GAME_RESOLUTION_WIDTH / 2, GAME_RESOLUTION_HEIGHT / 2.0f + 40);
+           = new Vector2(1000f, 850f);
 
         public static readonly Vector2 MENU_EXIT_BTN_POSITION
-            = new Vector2(GAME_RESOLUTION_WIDTH / 2, GAME_RESOLUTION_HEIGHT / 2.0f + 80);
+           // = new Vector2(GAME_RESOLUTION_WIDTH / 2, GAME_RESOLUTION_HEIGHT / 2.0f + 80);
+           = new Vector2(1500f, 850f);
 
         #endregion UI & Menu Constants
 
