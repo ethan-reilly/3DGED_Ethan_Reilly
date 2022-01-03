@@ -137,6 +137,7 @@
         /// </summary>
         /// <see cref="GDLibrary.Components.ColorChangeBehaviour"/>
         OnMouseClick,
+        OnscreenText
 
         //add more here...
     }

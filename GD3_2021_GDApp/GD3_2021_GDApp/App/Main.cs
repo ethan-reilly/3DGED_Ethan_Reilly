@@ -216,32 +216,34 @@ namespace GDApp
         /// <param name="gameTime"></param>
         protected override void Update(GameTime gameTime)
         {
-            //if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.P))
-            //{
-            //    //DEMO - raise event
-            //    //EventDispatcher.Raise(new EventData(EventCategoryType.Menu,
-            //    //    EventActionType.OnPause));
+            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.H))
+            {
+                //DEMO - raise event
+                //EventDispatcher.Raise(new EventData(EventCategoryType.Menu,
+                  //  EventActionType.OnPause));
 
-            //    object[] parameters = { nameTextObj };
+                object[] parameters = { nameTextObj };
 
-            //    EventDispatcher.Raise(new EventData(EventCategoryType.UiObject,
-            //        EventActionType.OnRemoveObject, parameters));
+                EventDispatcher.Raise(new EventData(EventCategoryType.UiObject,
+                    EventActionType.OnRemoveObject, parameters));
 
-            //    ////renderManager.StatusType = StatusType.Off;
-            //}
-            //else if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.U))
-            //{
-            //    //DEMO - raise event
+                //renderManager.StatusType = StatusType.Off;
 
-            //    object[] parameters = { "main game ui", nameTextObj };
+            }
+            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.U))
+            {
+                //DEMO - raise event
+                
 
-            //    EventDispatcher.Raise(new EventData(EventCategoryType.UiObject,
-            //        EventActionType.OnAddObject, parameters));
+                object[] parameters = { nameTextObj.Text, "Camera 1" };
 
-            //    //renderManager.StatusType = StatusType.Drawn;
-            //    //EventDispatcher.Raise(new EventData(EventCategoryType.Menu,
-            //    //  EventActionType.OnPlay));
-            //}
+                EventDispatcher.Raise(new EventData(EventCategoryType.UiObject,
+                    EventActionType.OnAddObject, parameters));
+
+                //renderManager.StatusType = StatusType.Drawn;
+                //EventDispatcher.Raise(new EventData(EventCategoryType.Menu,
+                //  EventActionType.OnPlay));
+            }
 
             if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.Up))
             {
@@ -283,19 +285,55 @@ namespace GDApp
             if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.C))
                 Application.SceneManager.ActiveScene.CycleCameras();
 
-            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.NumPad1))
+            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.Y))
             {
+                object[] parameters = { nameTextObj };
+
+                EventDispatcher.Raise(new EventData(EventCategoryType.UiObject,
+                    EventActionType.OnRemoveObject, parameters));
+
+
+                Application.SceneManager.ActiveScene.SetMainCamera("camera1");
+                /*
+                var camera1UI = new UIScene(AppData.UI_CAMERA_1);
+
+                //object[] parameters = { "player name", "Camera 1" };
+                //EventDispatcher.Raise(new EventData(EventCategoryType.UI, EventActionType.OnscreenText, parameters));
+
+
+                nameTextObj = new UITextObject("camera name", UIObjectType.Text,
+                new Transform2D(new Vector2(50, 50),
+                new Vector2(10, 10), 0),
+                0, fontDictionary["menu"], "CAMERA 1");
+
+                camera1UI.Add(nameTextObj);
+                uiSceneManager.SetActiveScene(AppData.UI_CAMERA_1);
+                */
 
             }
 
-
-
-            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.V))
+            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.NumPad2))
             {
-                object[] parameters = { "main menu video" };
-                EventDispatcher.Raise(new EventData(EventCategoryType.Video,
-                    EventActionType.OnPlay, parameters));
+                object[] parameters = { nameTextObj };
+
+                EventDispatcher.Raise(new EventData(EventCategoryType.UiObject,
+                    EventActionType.OnRemoveObject, parameters));
+
+
+                Application.SceneManager.ActiveScene.SetMainCamera("camera2");
             }
+
+            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.NumPad3))
+            {
+                object[] parameters = { nameTextObj };
+
+                EventDispatcher.Raise(new EventData(EventCategoryType.UiObject,
+                    EventActionType.OnRemoveObject, parameters));
+
+
+                Application.SceneManager.ActiveScene.SetMainCamera("camera3");
+            }
+
 
             base.Update(gameTime);
         }
@@ -663,10 +701,10 @@ namespace GDApp
             var str = "player name";
 
             //create the UI element
-            nameTextObj = new UITextObject(str, UIObjectType.Text,
+            nameTextObj = new UITextObject("player name", UIObjectType.Text,
                 new Transform2D(new Vector2(50, 50),
-                Vector2.One, 0),
-                0, font, "Brutus Maximus");
+                new Vector2(10, 10), 0),
+                0, font, "TEST");
 
             //  nameTextObj.Origin = font.MeasureString(str) / 2;
             //  nameTextObj.AddComponent(new UIExpandFadeBehaviour());
@@ -801,10 +839,10 @@ namespace GDApp
         /// <param name="level"></param>
         private void InitializeCameras(Scene level)
         {
-            #region First Person Camera - Non Collidable
+            #region Camera 1
 
             //add camera game object
-            var camera = new GameObject(AppData.CAMERA_FIRSTPERSON_NONCOLLIDABLE_NAME, GameObjectType.Camera);
+            var camera = new GameObject(AppData.CAMERA_1, GameObjectType.Camera);
 
             //add components
             //here is where we can set a smaller viewport e.g. for split screen
@@ -825,7 +863,34 @@ namespace GDApp
             //add to level
             level.Add(camera);
 
-            #endregion First Person Camera - Non Collidable
+            #endregion Camera 1
+
+            #region Camera 2
+
+            camera = new GameObject(AppData.CAMERA_2, GameObjectType.Camera);
+
+            camera.AddComponent(new Camera(_graphics.GraphicsDevice.Viewport));
+
+            camera.Transform.SetTranslation(0, 30, -15);
+            camera.Transform.SetRotation(0, 90, 90);
+
+            level.Add(camera);
+
+            #endregion Camera 2
+
+            #region Camera 3
+
+            camera = new GameObject(AppData.CAMERA_3, GameObjectType.Camera);
+
+            camera.AddComponent(new Camera(_graphics.GraphicsDevice.Viewport));
+
+            camera.Transform.SetTranslation(0, 0, -15);
+            camera.Transform.SetRotation(0, 0, 90);
+
+            level.Add(camera);
+
+            #endregion Camera 3
+
 
             #region Curve Camera - Non Collidable
 
@@ -873,7 +938,7 @@ namespace GDApp
             //new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             collider.AddPrimitive(new Box(new Vector3(0, 5, 10), new Vector3(0, 0, 0), 
-                new Vector3(1, 4, 1)),
+                new Vector3(2, 6, 2)),
               new MaterialProperties(0.2f, 0.8f, 0.7f));
 
             //var player = new Box(new Vector3(0, 5, 10), new Vector3(0, 0, 0),

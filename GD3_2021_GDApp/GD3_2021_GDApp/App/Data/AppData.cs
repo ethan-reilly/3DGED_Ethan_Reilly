@@ -11,9 +11,15 @@ namespace GDApp
         public static readonly string CAMERA_FIRSTPERSON_COLLIDABLE_NAME = "main collidable";
         public static readonly string CAMERA_CURVE_NONCOLLIDABLE_NAME = "curve noncollidable";
 
+
+        public static readonly string CAMERA_1 = "camera1";
+        public static readonly string CAMERA_2 = "camera2";
+        public static readonly string CAMERA_3 = "camera3";
+
+
         #region Game Level Constants
 
-        public const string GAME_TITLE_NAME = "My Game Title Goes Here";
+        public const string GAME_TITLE_NAME = "Camera Course";
 
 #if HI_RES
         public const int GAME_RESOLUTION_WIDTH = 1920;
@@ -29,6 +35,7 @@ namespace GDApp
         #region UI & Menu Constants
 
         public const string UI_SCENE_MAIN_NAME = "main ui";
+        public const string UI_CAMERA_1 = "camera 1 ui";
         public const string MENU_MAIN_NAME = "main menu";
         public const string MENU_CONTROLS_NAME = "controls menu";
 
