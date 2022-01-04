@@ -285,7 +285,7 @@ namespace GDApp
             if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.C))
                 Application.SceneManager.ActiveScene.CycleCameras();
 
-            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.Y))
+            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.NumPad1))
             {
                 object[] parameters = { nameTextObj };
 
@@ -333,6 +333,19 @@ namespace GDApp
 
                 Application.SceneManager.ActiveScene.SetMainCamera("camera3");
             }
+
+   
+            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.Y))
+                {
+                    object[] parameters = { nameTextObj };
+
+                    EventDispatcher.Raise(new EventData(EventCategoryType.UiObject,
+                        EventActionType.OnRemoveObject, parameters));
+
+
+                    Application.SceneManager.ActiveScene.SetMainCamera(AppData.CAMERA_FIRSTPERSON_COLLIDABLE_NAME);
+                }
+            
 
 
             base.Update(gameTime);
@@ -871,8 +884,8 @@ namespace GDApp
 
             camera.AddComponent(new Camera(_graphics.GraphicsDevice.Viewport));
 
-            camera.Transform.SetTranslation(0, 30, -15);
-            camera.Transform.SetRotation(0, 90, 90);
+            camera.Transform.SetTranslation(40, 60, -30);
+            camera.Transform.SetRotation(20f, 90f, 75f);
 
             level.Add(camera);
 
@@ -984,6 +997,66 @@ namespace GDApp
             InitializeCollidableTetrahedron(level, new Vector3(0, 0, -10));
             InitializeCollidableTetrahedron(level, new Vector3(6, 0, -28));
             InitializeCollidableTetrahedron(level, new Vector3(-6, 0, -38), 30f);
+
+            //InitializeCollidableHexagon(level, new Vector3(10, 3, 10));
+            InitializeCollidableTrapezium(level, new Vector3(-0, 3, -80));
+            //InitializeCollidableTrapezium(level, new Vector3(-0, 2, -0));
+            
+        }
+
+        private void InitializeCollidableTrapezium(Scene level, Vector3 translation)
+        {
+
+            //re-use the code on the gfx card, if we want to draw multiple objects using Clone
+            var shader = new BasicShader(Application.Content, false, true);
+            //re-use the vertices and indices of the model
+            var mesh = new Trapezium();
+
+            var platform = new GameObject("trapezium", GameObjectType.Architecture, true);
+            platform.Transform.Rotate(0, 0, 0);
+            platform.Transform.SetTranslation(translation);
+            platform.Transform.SetScale(6, 1, 11);
+            platform.AddComponent(new MeshRenderer(mesh, new BasicMaterial("platform_material", shader, Color.White, 1, textureDictionary["platform"])));
+
+            //add Collision Surface(s)
+            collider = new Collider();
+            platform.AddComponent(collider);
+            collider.AddPrimitive(new Box(
+                    new Vector3(-4f, -0.6f, -1.5f),
+                    new Vector3(0f, 0f, 0f),
+                   new Vector3(8f, 1.25f, 5f)),
+                    new MaterialProperties(0.8f, 0.8f, 0.7f));
+            collider.Enable(true, 0);
+
+            //add To Scene Manager
+            level.Add(platform);
+        }
+
+        private void InitializeCollidableHexagon(Scene level, Vector3 translation)
+        {
+            //re-use the code on the gfx card, if we want to draw multiple objects using Clone
+            var shader = new BasicShader(Application.Content, false, true);
+            //re-use the vertices and indices of the model
+            var mesh = new HexagonMesh();
+
+            var platform = new GameObject("hexagon", GameObjectType.Architecture, true);
+            platform.Transform.Rotate(0, 0, 0);
+            platform.Transform.SetTranslation(translation);
+            platform.Transform.SetScale(5, 5, 5);
+            platform.AddComponent(new MeshRenderer(mesh, new BasicMaterial("platform_material", shader, Color.White, 1, textureDictionary["platform"])));
+
+            //add Collision Surface(s)
+            //collider = new Collider();
+            //platform.AddComponent(collider);
+            //collider.AddPrimitive(new Box(
+            //        new Vector3(-3.5f, 0, -3.5f),
+            //        platform.Transform.LocalRotation,
+            //        platform.Transform.LocalScale),
+            //        new MaterialProperties(0.8f, 0.8f, 0.7f));
+            //collider.Enable(true, 0);
+
+            //add To Scene Manager
+            level.Add(platform);
         }
 
         private void InitializeCollidableTetrahedron(Scene level, Vector3 translation)
@@ -1039,6 +1112,8 @@ namespace GDApp
             //add To Scene Manager
             level.Add(platform);
         }
+
+        
 
         private void InitializeCollidableTriangleMeshes(Scene level)
         {/*

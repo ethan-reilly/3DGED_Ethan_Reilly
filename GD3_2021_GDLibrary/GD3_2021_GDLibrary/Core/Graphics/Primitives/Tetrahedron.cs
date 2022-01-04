@@ -6,7 +6,7 @@ using System;
 namespace GDLibrary.Graphics
 {
     /// <summary>
-    /// Defines a textured 1x1x1 cube, centred on origin, aligned with XYZ axis
+    /// Defines a textured 1x1x1 Tetrahedron, centred on origin, aligned with XYZ axis
     /// </summary>
     public class Tetrahedron : Mesh, ICloneable
     {

@@ -53,6 +53,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\Extensions\Texture2DExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Graphics\Primitives\HexagonMesh.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Graphics\Primitives\Tetrahedron.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Graphics\Primitives\Trapezium.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Graphics\Video\VideoCue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Managers\Physics\PhysicsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Managers\Physics\PickingManager.cs" />

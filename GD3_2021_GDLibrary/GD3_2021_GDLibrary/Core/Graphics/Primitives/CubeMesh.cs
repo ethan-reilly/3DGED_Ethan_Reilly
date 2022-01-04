@@ -14,11 +14,12 @@ namespace GDLibrary.Graphics
             #region Positions
 
             Vector3 topLeftFront = new Vector3(-0.5f, 0.5f, 0.5f);
-            Vector3 bottomLeftFront = new Vector3(-0.5f, -0.5f, 0.5f);
             Vector3 topRightFront = new Vector3(0.5f, 0.5f, 0.5f);
-            Vector3 bottomRightFront = new Vector3(0.5f, -0.5f, 0.5f);
             Vector3 topLeftBack = new Vector3(-0.5f, 0.5f, -0.5f);
             Vector3 topRightBack = new Vector3(0.5f, 0.5f, -0.5f);
+
+            Vector3 bottomRightFront = new Vector3(0.5f, -0.5f, 0.5f);
+            Vector3 bottomLeftFront = new Vector3(-0.5f, -0.5f, 0.5f);
             Vector3 bottomLeftBack = new Vector3(-0.5f, -0.5f, -0.5f);
             Vector3 bottomRightBack = new Vector3(0.5f, -0.5f, -0.5f);
 
