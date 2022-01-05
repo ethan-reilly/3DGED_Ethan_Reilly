@@ -233,8 +233,9 @@ namespace GDApp
             if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.U))
             {
                 //DEMO - raise event
-                
 
+                //spriteBatch.DrawString(spriteFont, $"Camera [{Camera.Main.GameObject.Name}, " +
+                  //  $"{translation}]", fpsTextPosition + new Vector2(0, 20), fpsTextColor);
                 object[] parameters = { nameTextObj.Text, "Camera 1" };
 
                 EventDispatcher.Raise(new EventData(EventCategoryType.UiObject,
@@ -909,17 +910,18 @@ namespace GDApp
 
             //add curve for camera translation
             var translationCurve = new Curve3D(CurveLoopType.Cycle);
-            translationCurve.Add(new Vector3(0, 2, 10), 0);
-            translationCurve.Add(new Vector3(0, 8, 15), 1000);
-            translationCurve.Add(new Vector3(0, 8, 20), 2000);
-            translationCurve.Add(new Vector3(0, 6, 25), 3000);
-            translationCurve.Add(new Vector3(0, 4, 25), 4000);
-            translationCurve.Add(new Vector3(0, 2, 10), 6000);
+            translationCurve.Add(new Vector3(0, 9, 40), 0);
+            translationCurve.Add(new Vector3(0, 9, 0), 7500);
+            translationCurve.Add(new Vector3(0, 15, -20), 13500);
+            translationCurve.Add(new Vector3(0, 9, -30), 20500);
+            //translationCurve.Add(new Vector3(0, 4, 25), 4000);
+            //translationCurve.Add(new Vector3(0, 2, 10), 6000);
 
             //add camera game object
             var curveCamera = new GameObject(AppData.CAMERA_CURVE_NONCOLLIDABLE_NAME, GameObjectType.Camera);
 
             //add components
+            curveCamera.Transform.SetRotation(new Vector3(-25f, 0f, 0f));
             curveCamera.AddComponent(new Camera(_graphics.GraphicsDevice.Viewport));
             curveCamera.AddComponent(new CurveBehaviour(translationCurve));
             curveCamera.AddComponent(new FOVOnScrollController(MathHelper.ToRadians(2)));
@@ -970,7 +972,7 @@ namespace GDApp
             #endregion First Person Camera - Collidable
 
             //set the main camera, if we dont call this then the first camera added will be the Main
-            level.SetMainCamera(AppData.CAMERA_FIRSTPERSON_COLLIDABLE_NAME);
+            level.SetMainCamera(AppData.CAMERA_CURVE_NONCOLLIDABLE_NAME);
 
             //allows us to scale time on all game objects that based movement on Time
             // Time.Instance.TimeScale = 0.1f;
