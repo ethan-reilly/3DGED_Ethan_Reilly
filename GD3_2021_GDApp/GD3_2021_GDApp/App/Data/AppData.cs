@@ -15,6 +15,7 @@ namespace GDApp
         public static readonly string CAMERA_1 = "camera1";
         public static readonly string CAMERA_2 = "camera2";
         public static readonly string CAMERA_3 = "camera3";
+        public static readonly string CAMERA_4 = "camera4";
 
 
         #region Game Level Constants
@@ -37,10 +38,10 @@ namespace GDApp
         public const string UI_SCENE_MAIN_NAME = "main ui";
         public const string UI_CAMERA_1 = "camera 1 ui";
         public const string MENU_MAIN_NAME = "main menu";
-        public const string MENU_CONTROLS_NAME = "controls menu";
+        public const string MENU_LEVEL_2 = "Level 2";
 
         public const string MENU_PLAY_BTN_NAME = "Play";
-        public const string MENU_CONTROLS_BTN_NAME = "Controls";
+        public const string MENU_PLAY_BTN_LVL_2 = "Play Level 2";
         public const string MENU_BACK_BTN_NAME = "Back";
         public const string MENU_EXIT_BTN_NAME = "Exit";
 

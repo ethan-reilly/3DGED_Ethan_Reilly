@@ -26,7 +26,6 @@ namespace GDApp
     public class Main : Game
     {
         #region Fields
-        String cameraNumber = "";
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -91,6 +90,7 @@ namespace GDApp
 
         //temps
         private Scene activeScene;
+        private Scene level2;
 
         private UITextObject nameTextObj;
         private Collider collider;
@@ -216,6 +216,7 @@ namespace GDApp
         /// <param name="gameTime"></param>
         protected override void Update(GameTime gameTime)
         {
+
             if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.H))
             {
                 //DEMO - raise event
@@ -346,10 +347,13 @@ namespace GDApp
 
                     Application.SceneManager.ActiveScene.SetMainCamera(AppData.CAMERA_FIRSTPERSON_COLLIDABLE_NAME);
                 }
-            
 
+            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.W))
+            {
+                InitializeIsometricCamera(activeScene);
+            }
 
-            base.Update(gameTime);
+                base.Update(gameTime);
         }
 
         /// <summary>
@@ -461,10 +465,22 @@ namespace GDApp
             var soundEffect =
                 Content.Load<SoundEffect>("Assets/Sounds/Effects/smokealarm1");
 
+            var backgroundMusic =
+                Content.Load<SoundEffect>("Assets/Sounds/music");
+
             //add the new sound effect
             soundManager.Add(new GDLibrary.Managers.Cue(
                 "smokealarm",
                 soundEffect,
+                SoundCategoryType.Alarm,
+                new Vector3(1, 0, 0),
+                false));
+
+            
+            //add the new sound effect
+            soundManager.Add(new GDLibrary.Managers.Cue(
+                "music",
+                backgroundMusic,
                 SoundCategoryType.Alarm,
                 new Vector3(1, 0, 0),
                 false));
@@ -488,6 +504,7 @@ namespace GDApp
 
             //environment
             textureDictionary.Add("grass", Content.Load<Texture2D>("Assets/Textures/Foliage/Ground/grass1"));
+            textureDictionary.Add("lava", Content.Load<Texture2D>("Assets/Textures/Foliage/Ground/lava"));
             textureDictionary.Add("crate1", Content.Load<Texture2D>("Assets/Textures/Props/Crates/crate1"));
             textureDictionary.Add("platform", Content.Load<Texture2D>("Assets/Textures/Props/wall"));
             textureDictionary.Add("platform_bounce", Content.Load<Texture2D>("Assets/Textures/Props/wall_bounce"));
@@ -498,7 +515,7 @@ namespace GDApp
 
             //menu
             textureDictionary.Add("mainmenu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/mainmenu"));
-            textureDictionary.Add("main_menu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/main_menu"));
+            textureDictionary.Add("main_menu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/main_menu_new"));
             textureDictionary.Add("audiomenu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/audiomenu"));
             textureDictionary.Add("controlsmenu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/controlsmenu"));
             textureDictionary.Add("exitmenuwithtrans", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/exitmenuwithtrans"));
@@ -507,7 +524,7 @@ namespace GDApp
 
             //reticule
             textureDictionary.Add("reticuleOpen",
-      Content.Load<Texture2D>("Assets/Textures/UI/Controls/reticuleOpen"));
+            Content.Load<Texture2D>("Assets/Textures/UI/Controls/reticuleOpen"));
             textureDictionary.Add("reticuleDefault",
           Content.Load<Texture2D>("Assets/Textures/UI/Controls/reticuleDefault"));
         }
@@ -534,10 +551,12 @@ namespace GDApp
         {
             float worldScale = 1000;
             activeScene = new Scene("level 1");
+            level2 = new Scene("level 2");
 
             InitializeCameras(activeScene);
 
             InitializeSkybox(activeScene, worldScale);
+            InitializeSkybox(level2, worldScale);
 
             //remove because now we are interested only in collidable things!
             //InitializeCubes(activeScene);
@@ -546,6 +565,7 @@ namespace GDApp
             InitializeCollidables(activeScene, worldScale);
 
             sceneManager.Add(activeScene);
+            sceneManager.Add(level2);
             sceneManager.LoadScene("level 1");
         }
 
@@ -624,20 +644,20 @@ namespace GDApp
 
             //same button texture so we can re-use texture, sourceRectangle and origin
 
-            var controlsBtn = new UIButtonObject(AppData.MENU_CONTROLS_BTN_NAME, UIObjectType.Button,
+            var level2button = new UIButtonObject(AppData.MENU_PLAY_BTN_LVL_2, UIObjectType.Button,
                 new Transform2D(AppData.MENU_CONTROLS_BTN_POSITION, 1.5f * Vector2.One, 0),
                 0.1f,
                 Color.White,
                 origin,
                 btnTexture,
-                "CONTROLS",
+                "PLAY LEVEL 2",
                 fontDictionary["menu"],
                 Color.Black);
 
             //demo button color change
-            controlsBtn.AddComponent(new UIColorMouseOverBehaviour(Color.Orange, Color.White));
+            level2button.AddComponent(new UIColorMouseOverBehaviour(Color.Orange, Color.White));
 
-            mainMenuUIScene.Add(controlsBtn);
+            mainMenuUIScene.Add(level2button);
 
             /**************************** Exit Button ****************************/
 
@@ -664,9 +684,9 @@ namespace GDApp
             //add scene to the menu manager
             uiMenuManager.Add(mainMenuUIScene);
 
-            /************************** Controls Menu Scene **************************/
+            /************************** PLAY LEVEL 2 Menu Scene **************************/
 
-            /************************** Options Menu Scene **************************/
+            
 
             /************************** Exit Menu Scene **************************/
 
@@ -712,13 +732,13 @@ namespace GDApp
             #region Add Text
 
             var font = fontDictionary["ui"];
-            var str = "player name";
+            var str = "level";
 
             //create the UI element
-            nameTextObj = new UITextObject("player name", UIObjectType.Text,
+            nameTextObj = new UITextObject(str, UIObjectType.Text,
                 new Transform2D(new Vector2(50, 50),
                 new Vector2(10, 10), 0),
-                0, font, "TEST");
+                0, font, "LEVEL 1");
 
             //  nameTextObj.Origin = font.MeasureString(str) / 2;
             //  nameTextObj.AddComponent(new UIExpandFadeBehaviour());
@@ -847,6 +867,36 @@ namespace GDApp
             level.Add(clone);
         }
 
+
+        private void InitializeIsometricCamera(Scene level)
+        {
+            #region Curve Camera - Non Collidable
+
+            //add curve for camera translation
+            var translationCurve = new Curve3D(CurveLoopType.Cycle);
+            translationCurve.Add(new Vector3(0, 15, 30), 0);
+            translationCurve.Add(new Vector3(0, 20, 0), 6000);
+            translationCurve.Add(new Vector3(0, 30, -20), 10500);
+            translationCurve.Add(new Vector3(0, 30, -30), 13000);
+            //translationCurve.Add(new Vector3(0, 4, 25), 4000);
+            //translationCurve.Add(new Vector3(0, 2, 10), 6000);
+
+            //add camera game object
+            var curveCamera = new GameObject(AppData.CAMERA_CURVE_NONCOLLIDABLE_NAME, GameObjectType.Camera);
+
+            //add components
+            curveCamera.Transform.SetRotation(new Vector3(-35f, 0f, 0f));
+            curveCamera.AddComponent(new Camera(_graphics.GraphicsDevice.Viewport));
+            curveCamera.AddComponent(new CurveBehaviour(translationCurve));
+            curveCamera.AddComponent(new FOVOnScrollController(MathHelper.ToRadians(2)));
+
+            //add to level
+            level.Add(curveCamera);
+            level.SetMainCamera(AppData.CAMERA_CURVE_NONCOLLIDABLE_NAME);
+
+            #endregion Curve Camera - Non Collidable
+        }
+
         /// <summary>
         /// Initialize the camera(s) in our scene
         /// </summary>
@@ -905,31 +955,19 @@ namespace GDApp
 
             #endregion Camera 3
 
+            #region Camera 4
 
-            #region Curve Camera - Non Collidable
+            camera = new GameObject(AppData.CAMERA_4, GameObjectType.Camera);
 
-            //add curve for camera translation
-            var translationCurve = new Curve3D(CurveLoopType.Cycle);
-            translationCurve.Add(new Vector3(0, 9, 40), 0);
-            translationCurve.Add(new Vector3(0, 9, 0), 7500);
-            translationCurve.Add(new Vector3(0, 15, -20), 13500);
-            translationCurve.Add(new Vector3(0, 9, -30), 20500);
-            //translationCurve.Add(new Vector3(0, 4, 25), 4000);
-            //translationCurve.Add(new Vector3(0, 2, 10), 6000);
+            camera.AddComponent(new Camera(_graphics.GraphicsDevice.Viewport));
 
-            //add camera game object
-            var curveCamera = new GameObject(AppData.CAMERA_CURVE_NONCOLLIDABLE_NAME, GameObjectType.Camera);
+            camera.Transform.SetTranslation(0, 15, 30);
+            camera.Transform.SetRotation(-35f, 0f, 0f);
 
-            //add components
-            curveCamera.Transform.SetRotation(new Vector3(-25f, 0f, 0f));
-            curveCamera.AddComponent(new Camera(_graphics.GraphicsDevice.Viewport));
-            curveCamera.AddComponent(new CurveBehaviour(translationCurve));
-            curveCamera.AddComponent(new FOVOnScrollController(MathHelper.ToRadians(2)));
+            level.Add(camera);
 
-            //add to level
-            level.Add(curveCamera);
+            #endregion Camera 4
 
-            #endregion Curve Camera - Non Collidable
 
             #region First Person Camera - Collidable
 
@@ -944,7 +982,7 @@ namespace GDApp
             camera.AddComponent(new Camera(_graphics.GraphicsDevice.Viewport));
 
             //adding a collidable surface that enables acceleration, jumping
-            var collider = new CharacterCollider(2, 2, true, false);
+            var collider = new CharacterCollider(2, 1.75f, true, false);
 
             camera.AddComponent(collider);
             //collider.AddPrimitive(new Capsule(camera.Transform.LocalTranslation,
@@ -952,6 +990,7 @@ namespace GDApp
             //Matrix.CreateRotationX(MathHelper.PiOver2), 1, 3.6f),
             //new MaterialProperties(0.2f, 0.8f, 0.7f));
 
+            //Player
             collider.AddPrimitive(new Box(new Vector3(0, 5, 10), new Vector3(0, 0, 0), 
                 new Vector3(2, 6, 2)),
               new MaterialProperties(0.2f, 0.8f, 0.7f));
@@ -972,7 +1011,7 @@ namespace GDApp
             #endregion First Person Camera - Collidable
 
             //set the main camera, if we dont call this then the first camera added will be the Main
-            level.SetMainCamera(AppData.CAMERA_CURVE_NONCOLLIDABLE_NAME);
+            level.SetMainCamera(AppData.CAMERA_4);
 
             //allows us to scale time on all game objects that based movement on Time
             // Time.Instance.TimeScale = 0.1f;
@@ -986,6 +1025,7 @@ namespace GDApp
         private void InitializeCollidables(Scene level, float worldScale = 500)
         {
             InitializeCollidableGround(level, worldScale);
+            InitializeCollidableLava(level, worldScale);
             InitializePlatforms(level);
             
             
@@ -994,14 +1034,43 @@ namespace GDApp
             //InitializeCollidableTriangleMeshes(level);
         }
 
+        private void InitializeCollidableLava(Scene level, float worldScale)
+        {
+            //re-use the code on the gfx card, if we want to draw multiple objects using Clone
+            var shader = new BasicShader(Application.Content, false, true);
+            //re-use the vertices and indices of the model
+            var mesh = new CubeMesh();
+
+
+            //create the lava floor
+            var lavaFloor = new GameObject("lava floor", GameObjectType.Ground, true);
+            //ground.Transform.Rotate(0, 0, 0);
+            lavaFloor.Transform.SetTranslation(0, -50, 0);
+            lavaFloor.Transform.SetScale(new Vector3(worldScale, 1, worldScale));
+            lavaFloor.AddComponent(new MeshRenderer(mesh, new BasicMaterial("lava_material", shader, Color.White, 1, textureDictionary["lava"])));
+
+            //add Collision Surface(s)
+            collider = new Collider();
+            lavaFloor.AddComponent(collider);
+            collider.AddPrimitive(new Box(
+                    lavaFloor.Transform.LocalTranslation,
+                    lavaFloor.Transform.LocalRotation,
+                    lavaFloor.Transform.LocalScale),
+                    new MaterialProperties(0f, 3f, 3f));
+            collider.Enable(true, 1);
+
+            //add To Scene Manager
+            level.Add(lavaFloor);
+        }
+
         private void InitializePlatforms(Scene level)
         {
             InitializeCollidableTetrahedron(level, new Vector3(0, 0, -10));
             InitializeCollidableTetrahedron(level, new Vector3(6, 0, -28));
-            InitializeCollidableTetrahedron(level, new Vector3(-6, 0, -38), 30f);
+            InitializeCollidableTetrahedron(level, new Vector3(-6, 0, -37), 8f);
 
             //InitializeCollidableHexagon(level, new Vector3(10, 3, 10));
-            InitializeCollidableTrapezium(level, new Vector3(-0, 3, -80));
+            InitializeCollidableTrapezium(level, new Vector3(-0, 3, -65));
             //InitializeCollidableTrapezium(level, new Vector3(-0, 2, -0));
             
         }
@@ -1017,16 +1086,16 @@ namespace GDApp
             var platform = new GameObject("trapezium", GameObjectType.Architecture, true);
             platform.Transform.Rotate(0, 0, 0);
             platform.Transform.SetTranslation(translation);
-            platform.Transform.SetScale(6, 1, 11);
+            platform.Transform.SetScale(8, 1, 13);
             platform.AddComponent(new MeshRenderer(mesh, new BasicMaterial("platform_material", shader, Color.White, 1, textureDictionary["platform"])));
 
             //add Collision Surface(s)
             collider = new Collider();
             platform.AddComponent(collider);
             collider.AddPrimitive(new Box(
-                    new Vector3(-4f, -0.6f, -1.5f),
+                    new Vector3(-6f, -0.6f, -1.5f),
                     new Vector3(0f, 0f, 0f),
-                   new Vector3(8f, 1.25f, 5f)),
+                   new Vector3(11f, 1.25f, 8f)),
                     new MaterialProperties(0.8f, 0.8f, 0.7f));
             collider.Enable(true, 0);
 

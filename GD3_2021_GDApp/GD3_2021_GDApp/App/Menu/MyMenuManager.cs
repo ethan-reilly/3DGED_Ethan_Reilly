@@ -19,10 +19,16 @@ namespace GDApp
             {
                 case AppData.MENU_PLAY_BTN_NAME:
                     EventDispatcher.Raise(new EventData(EventCategoryType.Menu, EventActionType.OnPlay));
+                    object[] backgroundMusic = { "music" };
+                    EventDispatcher.Raise(new EventData(EventCategoryType.Sound,
+                        EventActionType.OnPlay2D, backgroundMusic));
+                    
+
                     break;
 
-                case AppData.MENU_CONTROLS_BTN_NAME:
-                    SetActiveScene(AppData.MENU_CONTROLS_NAME);
+                case AppData.MENU_PLAY_BTN_LVL_2:
+                    SetActiveScene(AppData.MENU_LEVEL_2);
+                    EventDispatcher.Raise(new EventData(EventCategoryType.Menu, EventActionType.OnPlay));
                     break;
 
                 case AppData.MENU_BACK_BTN_NAME:
