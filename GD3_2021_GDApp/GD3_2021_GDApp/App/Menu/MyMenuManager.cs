@@ -27,8 +27,7 @@ namespace GDApp
                     break;
 
                 case AppData.MENU_PLAY_BTN_LVL_2:
-                    //SetActiveScene("level 2"); UiScene not Scene
-                    //LoadScene("level 2"); // Can't inherit from 2 classes, would have to make them interfaces
+                    Application.SceneManager.LoadScene(AppData.MENU_LEVEL_2);
                     EventDispatcher.Raise(new EventData(EventCategoryType.Menu, EventActionType.OnPlay));
                     break;
 

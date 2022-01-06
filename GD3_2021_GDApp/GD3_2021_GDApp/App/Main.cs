@@ -360,6 +360,9 @@ namespace GDApp
                     EventActionType.OnPlay2D, parameters));
             }
 
+            stateManager.Update(gameTime);
+            //if(stateManager.GetType )
+
             base.Update(gameTime);
         }
 
@@ -523,6 +526,7 @@ namespace GDApp
             textureDictionary.Add("crate1", Content.Load<Texture2D>("Assets/Textures/Props/Crates/crate1"));
             textureDictionary.Add("platform", Content.Load<Texture2D>("Assets/Textures/Props/wall"));
             textureDictionary.Add("platform_bounce", Content.Load<Texture2D>("Assets/Textures/Props/wall_bounce"));
+            textureDictionary.Add("wall", Content.Load<Texture2D>("Assets/Textures/Architecture/Walls/wall"));
 
             //ui
             textureDictionary.Add("ui_progress_32_8", Content.Load<Texture2D>("Assets/Textures/UI/Controls/ui_progress_32_8"));
@@ -593,6 +597,40 @@ namespace GDApp
         {
             InitializeGameMenu();
             InitializeGameUI();
+            InitializeLoseMenu();
+        }
+
+        private void InitializeLoseMenu()
+        {
+            UIObject menuObject = null;
+
+            /************************** Lose Menu Scene **************************/
+            //make the main menu scene
+            var loseScene = new UIScene(AppData.LOSE_SCREEN);
+
+            /**************************** Background Image ****************************/
+
+            //main background
+            var texture = textureDictionary["wall"];
+            //get how much we need to scale background to fit screen, then downsizes a little so we can see game behind background
+            var scale = _graphics.GetScaleForTexture(texture,
+                new Vector2(0.9f, 0.9f));
+
+            menuObject = new UITextureObject("main background",
+                UIObjectType.Texture,
+                new Transform2D(Screen.Instance.ScreenCentre, scale, 0), //sets position as center of screen
+                0,
+                new Color(255, 255, 255, 215),
+                texture.GetOriginAtCenter(), //if we want to position image on screen center then we need to set origin as texture center
+                texture);
+
+            //add ui object to scene
+            loseScene.Add(menuObject);
+
+            uiMenuManager.Add(loseScene);
+
+            //finally we say...where do we start
+            //uiMenuManager.SetActiveScene(AppData.LOSE_SCREEN);
         }
 
         /// <summary>
@@ -1067,7 +1105,8 @@ namespace GDApp
             lavaFloor.AddComponent(new MeshRenderer(mesh, new BasicMaterial("lava_material", shader, Color.White, 1, textureDictionary["lava"])));
 
             //add Collision Surface(s)
-            collider = new Collider();
+            //collider = new Collider();
+            collider = new MyPlayerCollider();
             lavaFloor.AddComponent(collider);
             collider.AddPrimitive(new Box(
                     lavaFloor.Transform.LocalTranslation,
@@ -1105,6 +1144,9 @@ namespace GDApp
             platform.Transform.SetTranslation(translation);
             platform.Transform.SetScale(8, 1, 13);
             platform.AddComponent(new MeshRenderer(mesh, new BasicMaterial("platform_material", shader, Color.White, 1, textureDictionary["platform"])));
+
+            //platform.AddComponent(new PickupBehaviour("platform", 0));
+            //EventDispatcher.Raise(new EventData(EventCategoryType.))
 
             //add Collision Surface(s)
             collider = new Collider();

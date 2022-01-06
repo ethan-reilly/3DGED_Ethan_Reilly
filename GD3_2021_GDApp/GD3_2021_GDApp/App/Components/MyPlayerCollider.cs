@@ -1,5 +1,6 @@
 ﻿using GDLibrary;
 using GDLibrary.Components;
+using GDLibrary.Core;
 
 namespace GDApp
 {
@@ -20,8 +21,13 @@ namespace GDApp
         protected override void HandleResponse(GameObject collideeGameObject)
         {
             //    System.Diagnostics.Debug.WriteLine($"{collideeGameObject.Name}");
-            if (collideeGameObject.GameObjectType == GameObjectType.Lava)
+            //if (collideeGameObject.GameObjectType == GameObjectType.Lava)
+
+            // Win Lose Mechanics
+            if (collideeGameObject.GameObjectType == GameObjectType.Camera)
             {
+              EventDispatcher.Raise(new EventData(EventCategoryType.Menu, EventActionType.OnPause));
+              EventDispatcher.Raise(new EventData(EventCategoryType.GameState, EventActionType.OnLose));
                 
             }
             //if interactable then...
