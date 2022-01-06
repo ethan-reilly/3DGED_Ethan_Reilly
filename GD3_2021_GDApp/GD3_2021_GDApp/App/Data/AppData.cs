@@ -38,7 +38,10 @@ namespace GDApp
         public const string UI_SCENE_MAIN_NAME = "main ui";
         public const string UI_CAMERA_1 = "camera 1 ui";
         public const string MENU_MAIN_NAME = "main menu";
-        public const string MENU_LEVEL_2 = "Level 2";
+        public const string MENU_LEVEL_2 = "level 2";
+
+        public const string WIN_SCREEN = "win";
+        public const string LOSE_SCREEN = "lose";
 
         public const string MENU_PLAY_BTN_NAME = "Play";
         public const string MENU_PLAY_BTN_LVL_2 = "Play Level 2";

@@ -37,6 +37,12 @@ namespace GDApp
                 //  EventActionType.OnAddInventory, parameters1));
             }
 
+            if (parentGameObject.GameObjectType == GameObjectType.Lava)
+            {
+                EventDispatcher.Raise(new EventData(EventCategoryType.Menu, EventActionType.OnPause));
+            }
+
+
             base.HandleResponse(parentGameObject);
         }
     }

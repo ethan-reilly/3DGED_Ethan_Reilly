@@ -112,7 +112,7 @@ namespace GDApp
         private void InitializeEngine(string gameTitle, int width, int height)
         {
             //set game title
-            Window.Title = gameTitle;
+            Window.Title = "Lava Leap";
 
             //the most important element! add event dispatcher for system events
             eventDispatcher = new EventDispatcher(this);
@@ -353,7 +353,14 @@ namespace GDApp
                 InitializeIsometricCamera(activeScene);
             }
 
-                base.Update(gameTime);
+            if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.Space))
+            {
+                object[] parameters = { "bounce" };
+                EventDispatcher.Raise(new EventData(EventCategoryType.Sound,
+                    EventActionType.OnPlay2D, parameters));
+            }
+
+            base.Update(gameTime);
         }
 
         /// <summary>
@@ -468,6 +475,9 @@ namespace GDApp
             var backgroundMusic =
                 Content.Load<SoundEffect>("Assets/Sounds/music");
 
+            var bounce =
+               Content.Load<SoundEffect>("Assets/Sounds/Effects/bounce");
+
             //add the new sound effect
             soundManager.Add(new GDLibrary.Managers.Cue(
                 "smokealarm",
@@ -476,12 +486,17 @@ namespace GDApp
                 new Vector3(1, 0, 0),
                 false));
 
-            
-            //add the new sound effect
             soundManager.Add(new GDLibrary.Managers.Cue(
                 "music",
                 backgroundMusic,
-                SoundCategoryType.Alarm,
+                SoundCategoryType.BackgroundMusic,
+                new Vector3(1, 0, 0),
+                false));
+
+            soundManager.Add(new GDLibrary.Managers.Cue(
+                "bounce",
+                bounce,
+                SoundCategoryType.Effect,
                 new Vector3(1, 0, 0),
                 false));
         }
@@ -551,7 +566,7 @@ namespace GDApp
         {
             float worldScale = 1000;
             activeScene = new Scene("level 1");
-            level2 = new Scene("level 2");
+            level2 = new Scene(AppData.MENU_LEVEL_2);
 
             InitializeCameras(activeScene);
 
@@ -566,7 +581,9 @@ namespace GDApp
 
             sceneManager.Add(activeScene);
             sceneManager.Add(level2);
+
             sceneManager.LoadScene("level 1");
+            //sceneManager.LoadScene("level 2");
         }
 
         /// <summary>
@@ -1043,7 +1060,7 @@ namespace GDApp
 
 
             //create the lava floor
-            var lavaFloor = new GameObject("lava floor", GameObjectType.Ground, true);
+            var lavaFloor = new GameObject("lava floor", GameObjectType.Lava, true);
             //ground.Transform.Rotate(0, 0, 0);
             lavaFloor.Transform.SetTranslation(0, -50, 0);
             lavaFloor.Transform.SetScale(new Vector3(worldScale, 1, worldScale));
@@ -1237,7 +1254,7 @@ namespace GDApp
             #endregion Reusable - You can copy and re-use this code elsewhere, if required
 
             //create the ground
-            var ground = new GameObject("ground", GameObjectType.Ground, true);
+            var ground = new GameObject("ground", GameObjectType.Architecture, true);
             //ground.Transform.Rotate(0, 0, 0);
             ground.Transform.SetTranslation(0, -1, 10);
             ground.Transform.SetScale(20, 2, 20);

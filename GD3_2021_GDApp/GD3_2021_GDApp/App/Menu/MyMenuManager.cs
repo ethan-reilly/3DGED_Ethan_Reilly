@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GDApp
 {
-    public class MyMenuManager : UIMenuManager
+    public class MyMenuManager : UIMenuManager//, UISceneManager
     {
         public MyMenuManager(Game game, SpriteBatch spriteBatch)
             : base(game, spriteBatch)
@@ -27,7 +27,8 @@ namespace GDApp
                     break;
 
                 case AppData.MENU_PLAY_BTN_LVL_2:
-                    SetActiveScene(AppData.MENU_LEVEL_2);
+                    //SetActiveScene("level 2"); UiScene not Scene
+                    //LoadScene("level 2"); // Can't inherit from 2 classes, would have to make them interfaces
                     EventDispatcher.Raise(new EventData(EventCategoryType.Menu, EventActionType.OnPlay));
                     break;
 
