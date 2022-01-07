@@ -32,6 +32,37 @@ Game Camera:
 Intro Camera:
 - Camera can be used as an intro camera
 
+Sound:
+- Diegetic
+  - Lose Noise / "Ouch"
+  - Bounce Sound
+  - Win Noise
+ 
+- Non-Diegetic
+  - Background Music
+  
+Collision Detection & Collision Response:
+- Tetrahedron has collison so you can land on it.
+- Green platforms are bouncier than non-green
+
+Frustum culling:
+
+The Game State:
+- Menu shows if the player has won or lost (if none appears the player is still playing)
+and noise play for each
+- Player wins if they reach the end, lose if they touch lava
+
+Game Levels:
+- Designed a 2nd level but didn't have time to fully implement it
+- Both levels have 3+ jumps
+
+Creativity/Playability:
+
+
+
+## Link To Repo
+https://github.com/ethan-reilly/3DGED_Ethan_Reilly
+
 ---
 
 *For a markdown cheat sheet see [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/)*
