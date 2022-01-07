@@ -534,6 +534,8 @@ namespace GDApp
 
             //menu
             textureDictionary.Add("mainmenu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/mainmenu"));
+            textureDictionary.Add("loseMenu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/lose"));
+            textureDictionary.Add("winMenu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/win"));
             textureDictionary.Add("main_menu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/main_menu_new"));
             textureDictionary.Add("audiomenu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/audiomenu"));
             textureDictionary.Add("controlsmenu", Content.Load<Texture2D>("Assets/Textures/UI/Backgrounds/controlsmenu"));
@@ -598,6 +600,7 @@ namespace GDApp
             InitializeGameMenu();
             InitializeGameUI();
             InitializeLoseMenu();
+            InitializeWinMenu();
         }
 
         private void InitializeLoseMenu()
@@ -605,16 +608,15 @@ namespace GDApp
             UIObject menuObject = null;
 
             /************************** Lose Menu Scene **************************/
-            //make the main menu scene
+            //make the lose menu scene
             var loseScene = new UIScene(AppData.LOSE_SCREEN);
 
             /**************************** Background Image ****************************/
 
-            //main background
-            var texture = textureDictionary["wall"];
+            var texture = textureDictionary["loseMenu"];
             //get how much we need to scale background to fit screen, then downsizes a little so we can see game behind background
             var scale = _graphics.GetScaleForTexture(texture,
-                new Vector2(0.9f, 0.9f));
+                new Vector2(1f, 1f));
 
             menuObject = new UITextureObject("main background",
                 UIObjectType.Texture,
@@ -627,10 +629,44 @@ namespace GDApp
             //add ui object to scene
             loseScene.Add(menuObject);
 
-            uiMenuManager.Add(loseScene);
+            //uiMenuManager.Add(loseScene);
+            uiSceneManager.Add(loseScene);
 
             //finally we say...where do we start
             //uiMenuManager.SetActiveScene(AppData.LOSE_SCREEN);
+        }
+
+        private void InitializeWinMenu()
+        {
+            UIObject menuObject = null;
+
+            /************************** Lose Menu Scene **************************/
+            //make the win menu scene
+            var winScene = new UIScene(AppData.WIN_SCREEN);
+
+            /**************************** Background Image ****************************/
+
+            var texture = textureDictionary["winMenu"];
+            //get how much we need to scale background to fit screen, then downsizes a little so we can see game behind background
+            var scale = _graphics.GetScaleForTexture(texture,
+                new Vector2(1f, 1f));
+
+            menuObject = new UITextureObject("main background",
+                UIObjectType.Texture,
+                new Transform2D(Screen.Instance.ScreenCentre, scale, 0), //sets position as center of screen
+                0,
+                new Color(255, 255, 255, 215),
+                texture.GetOriginAtCenter(), //if we want to position image on screen center then we need to set origin as texture center
+                texture);
+
+            //add ui object to scene
+            winScene.Add(menuObject);
+
+            //uiMenuManager.Add(winScene);
+            uiSceneManager.Add(winScene);
+
+            //finally we say...where do we start
+            //uiMenuManager.SetActiveScene(AppData.WIN_SCREEN);
         }
 
         /// <summary>
@@ -1149,7 +1185,7 @@ namespace GDApp
             //EventDispatcher.Raise(new EventData(EventCategoryType.))
 
             //add Collision Surface(s)
-            collider = new Collider();
+            collider = new MyPlayerCollider2();
             platform.AddComponent(collider);
             collider.AddPrimitive(new Box(
                     new Vector3(-6f, -0.6f, -1.5f),

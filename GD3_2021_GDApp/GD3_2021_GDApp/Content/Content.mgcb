@@ -484,6 +484,18 @@
 /processorParam:TextureFormat=Color
 /build:Assets/Textures/UI/Backgrounds/exitmenuwithtrans.png
 
+#begin Assets/Textures/UI/Backgrounds/lose.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Assets/Textures/UI/Backgrounds/lose.png
+
 #begin Assets/Textures/UI/Backgrounds/main_menu.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -519,6 +531,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Assets/Textures/UI/Backgrounds/mainmenu.PNG
+
+#begin Assets/Textures/UI/Backgrounds/win.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Assets/Textures/UI/Backgrounds/win.png
 
 #begin Assets/Textures/UI/Controls/generic_btn.png
 /importer:TextureImporter
