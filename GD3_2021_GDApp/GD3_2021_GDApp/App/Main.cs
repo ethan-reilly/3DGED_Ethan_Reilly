@@ -482,6 +482,16 @@ namespace GDApp
             var bounce =
                Content.Load<SoundEffect>("Assets/Sounds/Effects/bounce");
 
+            var win =
+               Content.Load<SoundEffect>("Assets/Sounds/Effects/win");
+
+            var lose =
+               Content.Load<SoundEffect>("Assets/Sounds/Effects/lose");
+
+            var loseNoise =
+               Content.Load<SoundEffect>("Assets/Sounds/Effects/loseNoise");
+
+
             //add the new sound effect
             soundManager.Add(new GDLibrary.Managers.Cue(
                 "smokealarm",
@@ -500,6 +510,27 @@ namespace GDApp
             soundManager.Add(new GDLibrary.Managers.Cue(
                 "bounce",
                 bounce,
+                SoundCategoryType.Effect,
+                new Vector3(1, 0, 0),
+                false));
+
+            soundManager.Add(new GDLibrary.Managers.Cue(
+                "win",
+                win,
+                SoundCategoryType.Effect,
+                new Vector3(1, 0, 0),
+                false));
+
+            soundManager.Add(new GDLibrary.Managers.Cue(
+                "lose",
+                lose,
+                SoundCategoryType.Effect,
+                new Vector3(1, 0, 0),
+                false));
+
+            soundManager.Add(new GDLibrary.Managers.Cue(
+                "loseNoise",
+                loseNoise,
                 SoundCategoryType.Effect,
                 new Vector3(1, 0, 0),
                 false));

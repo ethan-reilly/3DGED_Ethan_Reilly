@@ -10,6 +10,7 @@ namespace GDApp
     /// </summary>
     public class MyPlayerCollider2 : Collider
     {
+        bool play = false;
         /// <summary>
         /// Constructs collider which is always going to handle collisions and is never going to be a trigger
         /// </summary>
@@ -31,6 +32,14 @@ namespace GDApp
                 //EventDispatcher.Raise(new EventData(EventCategoryType.Sound, EventActionType.OnPause));
                 EventDispatcher.Raise(new EventData(EventCategoryType.GameState, EventActionType.OnWin));
                 //Application.SceneManager.LoadScene(AppData.LOSE_SCREEN);
+
+                while (!play)
+                {
+                    object[] parameters = { "win" };
+                    EventDispatcher.Raise(new EventData(EventCategoryType.Sound, EventActionType.OnPlay2D, parameters));
+
+                    play = true;
+                }
 
             }
             //if interactable then...
