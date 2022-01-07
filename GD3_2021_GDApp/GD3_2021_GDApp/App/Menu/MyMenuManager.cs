@@ -28,6 +28,9 @@ namespace GDApp
 
                 case AppData.MENU_PLAY_BTN_LVL_2:
                     Application.SceneManager.LoadScene(AppData.MENU_LEVEL_2);
+                    object[] backgroundMusic2 = { "music" };
+                    EventDispatcher.Raise(new EventData(EventCategoryType.Sound,
+                        EventActionType.OnPlay2D, backgroundMusic2));
                     EventDispatcher.Raise(new EventData(EventCategoryType.Menu, EventActionType.OnPlay));
                     break;
 

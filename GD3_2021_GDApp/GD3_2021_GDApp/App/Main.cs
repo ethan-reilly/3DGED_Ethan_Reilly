@@ -351,6 +351,7 @@ namespace GDApp
             if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.W))
             {
                 InitializeIsometricCamera(activeScene);
+                //InitializeIsometricCamera(level2);
             }
 
             if (Input.Keys.WasJustPressed(Microsoft.Xna.Framework.Input.Keys.Space))
@@ -577,7 +578,7 @@ namespace GDApp
             InitializeCameras(activeScene);
 
             InitializeSkybox(activeScene, worldScale);
-            InitializeSkybox(level2, worldScale);
+
 
             //remove because now we are interested only in collidable things!
             //InitializeCubes(activeScene);
@@ -586,10 +587,30 @@ namespace GDApp
             InitializeCollidables(activeScene, worldScale);
 
             sceneManager.Add(activeScene);
+
+
+
+            InitializeCameras(level2);
+
+            InitializeSkybox(level2, worldScale);
+
+            //remove because now we are interested only in collidable things!
+            //InitializeCubes(activeScene);
+            //InitializeModels(activeScene);
+
+            InitializeCollidablesLevel2(level2, worldScale);
+
             sceneManager.Add(level2);
 
             sceneManager.LoadScene("level 1");
             //sceneManager.LoadScene("level 2");
+        }
+
+        private void InitializeCollidablesLevel2(Scene level, float worldScale)
+        {
+            InitializeCollidableGround(level, worldScale);
+            InitializeCollidableLava(level, worldScale);
+            InitializePlatformsLevel2(level);
         }
 
         /// <summary>
@@ -800,23 +821,23 @@ namespace GDApp
             var position = new Vector2(_graphics.PreferredBackBufferWidth / 2, 50);
             var origin = new Vector2(texture.Width / 2, texture.Height / 2);
 
-            //create the UI element
-            var healthTextureObj = new UITextureObject("health",
-                UIObjectType.Texture,
-                new Transform2D(position, new Vector2(2, 0.5f), 0),
-                0,
-                Color.White,
-                origin,
-                texture);
+            ////create the UI element
+            //var healthTextureObj = new UITextureObject("health",
+            //    UIObjectType.Texture,
+            //    new Transform2D(position, new Vector2(2, 0.5f), 0),
+            //    0,
+            //    Color.White,
+            //    origin,
+            //    texture);
 
-            //add a demo time based behaviour - because we can!
-            healthTextureObj.AddComponent(new UITimeColorFlipBehaviour(Color.White, Color.Red, 1000));
+            ////add a demo time based behaviour - because we can!
+            //healthTextureObj.AddComponent(new UITimeColorFlipBehaviour(Color.White, Color.Red, 1000));
 
-            //add a progress controller
-            healthTextureObj.AddComponent(new UIProgressBarController(5, 10));
+            ////add a progress controller
+            //healthTextureObj.AddComponent(new UIProgressBarController(5, 10));
 
-            //add the ui element to the scene
-            mainGameUIScene.Add(healthTextureObj);
+            ////add the ui element to the scene
+            //mainGameUIScene.Add(healthTextureObj);
 
             #endregion Add Health Bar
 
@@ -829,7 +850,7 @@ namespace GDApp
             nameTextObj = new UITextObject(str, UIObjectType.Text,
                 new Transform2D(new Vector2(50, 50),
                 new Vector2(10, 10), 0),
-                0, font, "LEVEL 1");
+                0, font, "ESCAPE");
 
             //  nameTextObj.Origin = font.MeasureString(str) / 2;
             //  nameTextObj.AddComponent(new UIExpandFadeBehaviour());
@@ -1165,6 +1186,20 @@ namespace GDApp
             InitializeCollidableTrapezium(level, new Vector3(-0, 3, -65));
             //InitializeCollidableTrapezium(level, new Vector3(-0, 2, -0));
             
+        }
+
+        private void InitializePlatformsLevel2(Scene level)
+        {
+            InitializeCollidableTetrahedron(level, new Vector3(10, 0, -10));
+            InitializeCollidableTetrahedron(level, new Vector3(-10, 0, -10));
+            InitializeCollidableTetrahedron(level, new Vector3(0, 0, -37), 8f);
+            InitializeCollidableTetrahedron(level, new Vector3(0, 10, -58));
+            InitializeCollidableTetrahedron(level, new Vector3(12, 6, -71));
+
+            
+            InitializeCollidableTrapezium(level, new Vector3(-0, -3, -85));
+            //InitializeCollidableTrapezium(level, new Vector3(-0, 2, -0));
+
         }
 
         private void InitializeCollidableTrapezium(Scene level, Vector3 translation)
